@@ -1,0 +1,19 @@
+<h2>Mes tâches</h2>
+
+<app-task-form (taskCreated)="onTaskCreated($event)"></app-task-form>
+
+@if (tasks().length > 0) {
+  <ul>
+    @for (task of tasks(); track task.id) {
+      <li>
+        <strong>{{ task.titre }}</strong> - {{ task.description }}
+        @if (task.termine) {
+          <span> ✅</span>
+        }
+        <button (click)="deleteTask(task.id!)">Supprimer</button>
+      </li>
+    }
+  </ul>
+} @else {
+  <p>Aucune tâche pour l'instant.</p>
+}
