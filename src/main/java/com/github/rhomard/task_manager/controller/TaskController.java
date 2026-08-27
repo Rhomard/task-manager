@@ -2,7 +2,6 @@ package com.github.rhomard.task_manager.controller;
 
 import com.github.rhomard.task_manager.model.Task;
 import com.github.rhomard.task_manager.repository.TaskRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,8 +11,11 @@ import java.util.List;
 @RequestMapping("/api/tasks")
 public class TaskController {
 
-    @Autowired
     private TaskRepository taskRepository;
+
+    public TaskController(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
 
     // GET /api/tasks -> liste toutes les tâches
     @GetMapping
