@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Task } from '../../models/task.model';
 
@@ -8,8 +8,11 @@ import { Task } from '../../models/task.model';
   templateUrl: './task-form.html',
   styleUrl: './task-form.css'
 })
-export class TaskForm {
+export class TaskForm implements OnChanges {
+  @Input() taskToEdit: Task | null = null;
   @Output() taskCreated = new EventEmitter<Task>();
+  @Output() taskUpdated = new EventEmitter<Task>();
+  @Output() cancelled = new EventEmitter<void>();
 
   form: FormGroup;
 
@@ -20,15 +23,39 @@ export class TaskForm {
     });
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['taskToEdit']) {
+      if (this.taskToEdit) {
+        this.form.patchValue({
+          titre: this.taskToEdit.titre,
+          description: this.taskToEdit.description
+        });
+      } else {
+        this.form.reset();
+      }
+    }
+  }
+
   onSubmit(): void {
     if (this.form.valid) {
-      const newTask: Task = {
-        titre: this.form.value.titre,
-        description: this.form.value.description,
-        termine: false
-      };
-      this.taskCreated.emit(newTask);
+      if (this.taskToEdit) {
+        this.taskUpdated.emit({
+          ...this.taskToEdit,
+          titre: this.form.value.titre,
+          description: this.form.value.description
+        });
+      } else {
+        this.taskCreated.emit({
+          titre: this.form.value.titre,
+          description: this.form.value.description,
+          termine: false
+        });
+      }
       this.form.reset();
     }
+  }
+
+  onCancel(): void {
+    this.cancelled.emit();
   }
 }

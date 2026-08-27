@@ -1,15 +1,22 @@
 <h2>Mes tâches</h2>
 
-<app-task-form (taskCreated)="onTaskCreated($event)"></app-task-form>
+<app-task-form
+  [taskToEdit]="taskToEdit()"
+  (taskCreated)="onTaskCreated($event)"
+  (taskUpdated)="onTaskUpdated($event)"
+  (cancelled)="cancelEdit()">
+</app-task-form>
 
 @if (tasks().length > 0) {
   <ul>
     @for (task of tasks(); track task.id) {
       <li>
+        <input type="checkbox" [checked]="task.termine" (change)="toggleTermine(task)" />
         <strong>{{ task.titre }}</strong> - {{ task.description }}
         @if (task.termine) {
           <span> ✅</span>
         }
+        <button (click)="startEdit(task)">Éditer</button>
         <button (click)="deleteTask(task.id!)">Supprimer</button>
       </li>
     }
