@@ -27,21 +27,27 @@ export class TaskList implements OnInit {
   }
 
   onTaskCreated(task: Task): void {
-    this.taskService.createTask(task).subscribe(createdTask => {
+  this.taskService.createTask(task).subscribe({
+    next: createdTask => {
       this.tasks.update(current => [...current, createdTask]);
       this.showMessage('Tâche ajoutée');
-    });
-  }
+    },
+    error: () => {} // déjà affiché par l'intercepteur
+  });
+}
 
   onTaskUpdated(task: Task): void {
-    this.taskService.updateTask(task.id!, task).subscribe(updatedTask => {
+  this.taskService.updateTask(task.id!, task).subscribe({
+    next: updatedTask => {
       this.tasks.update(current =>
         current.map(t => t.id === updatedTask.id ? updatedTask : t)
       );
       this.taskToEdit.set(null);
       this.showMessage('Tâche modifiée');
-    });
-  }
+    },
+    error: () => {}
+  });
+}
 
   toggleTermine(task: Task): void {
     const updated = { ...task, termine: !task.termine };
@@ -61,11 +67,14 @@ export class TaskList implements OnInit {
   }
 
   deleteTask(id: number): void {
-    this.taskService.deleteTask(id).subscribe(() => {
+  this.taskService.deleteTask(id).subscribe({
+    next: () => {
       this.tasks.update(current => current.filter(t => t.id !== id));
       this.showMessage('Tâche supprimée');
-    });
-  }
+    },
+    error: () => {}
+  });
+}
 
   private showMessage(message: string): void {
     this.snackBar.open(message, 'Fermer', { duration: 3000 });
