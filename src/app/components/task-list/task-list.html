@@ -8,19 +8,26 @@
 </app-task-form>
 
 @if (tasks().length > 0) {
-  <ul>
+  <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;">
     @for (task of tasks(); track task.id) {
-      <li>
-        <input type="checkbox" [checked]="task.termine" (change)="toggleTermine(task)" />
-        <strong>{{ task.titre }}</strong> - {{ task.description }}
-        @if (task.termine) {
-          <span> ✅</span>
-        }
-        <button (click)="startEdit(task)">Éditer</button>
-        <button (click)="deleteTask(task.id!)">Supprimer</button>
-      </li>
+      <mat-card>
+        <mat-card-content style="display: flex; align-items: center; gap: 8px; padding: 8px 16px;">
+          <mat-checkbox [checked]="task.termine" (change)="toggleTermine(task)"></mat-checkbox>
+
+          <div style="flex: 1;" [class.done]="task.termine">
+            <strong>{{ task.titre }}</strong> - {{ task.description }}
+          </div>
+
+          <button mat-icon-button (click)="startEdit(task)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteTask(task.id!)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-card-content>
+      </mat-card>
     }
-  </ul>
+  </div>
 } @else {
   <p>Aucune tâche pour l'instant.</p>
 }

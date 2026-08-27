@@ -1,10 +1,14 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 import { Task } from '../../models/task.model';
 
 @Component({
   selector: 'app-task-form',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule],
   templateUrl: './task-form.html',
   styleUrl: './task-form.css'
 })
@@ -13,6 +17,8 @@ export class TaskForm implements OnChanges {
   @Output() taskCreated = new EventEmitter<Task>();
   @Output() taskUpdated = new EventEmitter<Task>();
   @Output() cancelled = new EventEmitter<void>();
+
+  @ViewChild(FormGroupDirective) formGroupDirective!: FormGroupDirective;
 
   form: FormGroup;
 
@@ -31,7 +37,7 @@ export class TaskForm implements OnChanges {
           description: this.taskToEdit.description
         });
       } else {
-        this.form.reset();
+        this.formGroupDirective?.resetForm();
       }
     }
   }
@@ -51,11 +57,12 @@ export class TaskForm implements OnChanges {
           termine: false
         });
       }
-      this.form.reset();
+      this.formGroupDirective.resetForm();
     }
   }
 
   onCancel(): void {
     this.cancelled.emit();
+    this.formGroupDirective.resetForm();
   }
 }
