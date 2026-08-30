@@ -1,0 +1,33 @@
+<h2>Mes tâches</h2>
+
+<app-task-form
+  [taskToEdit]="taskToEdit()"
+  (taskCreated)="onTaskCreated($event)"
+  (taskUpdated)="onTaskUpdated($event)"
+  (cancelled)="cancelEdit()">
+</app-task-form>
+
+@if (tasks().length > 0) {
+  <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;">
+    @for (task of tasks(); track task.id) {
+      <mat-card>
+        <mat-card-content style="display: flex; align-items: center; gap: 8px; padding: 8px 16px;">
+          <mat-checkbox [checked]="task.termine" (change)="toggleTermine(task)"></mat-checkbox>
+
+          <div style="flex: 1;" [class.done]="task.termine">
+            <strong>{{ task.titre }}</strong> - {{ task.description }}
+          </div>
+
+          <button mat-icon-button (click)="startEdit(task)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteTask(task.id!)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-card-content>
+      </mat-card>
+    }
+  </div>
+} @else {
+  <p>Aucune tâche pour l'instant.</p>
+}

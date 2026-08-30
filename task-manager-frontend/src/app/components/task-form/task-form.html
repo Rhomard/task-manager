@@ -1,0 +1,24 @@
+<mat-card>
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline" style="width: 100%;">
+        <mat-label>Titre de la tâche</mat-label>
+        <input matInput formControlName="titre" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width: 100%;">
+        <mat-label>Description</mat-label>
+        <input matInput formControlName="description" />
+      </mat-form-field>
+
+      <div style="display: flex; gap: 8px;">
+        <button mat-flat-button type="submit" [disabled]="form.invalid">
+          {{ taskToEdit ? 'Modifier' : 'Ajouter' }}
+        </button>
+        @if (taskToEdit) {
+          <button mat-stroked-button type="button" (click)="onCancel()">Annuler</button>
+        }
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
