@@ -1,9 +1,11 @@
 <mat-toolbar>
   <span>Task Manager</span>
+  <span style="flex: 1;"></span>
+  @if (authService.isAuthenticated()) {
+    <button mat-button (click)="authService.logout()">Déconnexion</button>
+  }
 </mat-toolbar>
 
 <div style="max-width: 700px; margin: 24px auto; padding: 0 16px;">
-  <app-task-list></app-task-list>
+  <router-outlet />
 </div>
-
-<router-outlet />

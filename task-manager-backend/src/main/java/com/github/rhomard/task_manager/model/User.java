@@ -7,24 +7,20 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "app_user")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Task {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Le titre est obligatoire")
-    private String titre;
+    @NotBlank
+    @Column(unique = true)
+    private String email;
 
-    @NotBlank(message = "La description est obligatoire")
-    private String description;
-
-    private boolean termine = false;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = true)
-    private User user;
+    @NotBlank
+    private String password;
 }

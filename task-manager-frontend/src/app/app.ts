@@ -1,14 +1,16 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { TaskList } from './components/task-list/task-list';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { AuthService } from './services/auth.service';
 
 @Component({
-  imports: [RouterOutlet, TaskList, MatToolbarModule],
   selector: 'app-root',
-  styleUrl: './app.css',
+  imports: [RouterOutlet, MatToolbarModule, MatButtonModule],
   templateUrl: './app.html',
+  styleUrl: './app.css'
 })
 export class App {
-  protected readonly title = signal('task-manager-frontend');
+  title = 'task-manager-frontend';
+  constructor(public authService: AuthService) {}
 }
