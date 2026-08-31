@@ -2,6 +2,12 @@
   <span>Task Manager</span>
   <span style="flex: 1;"></span>
   @if (authService.isAuthenticated()) {
+    <span style="font-size: 0.9em; opacity: 0.85;">
+      Connecté(e) en tant que {{ authService.userEmail() }}
+    </span>
+  }
+  <span style="flex: 1;"></span>
+  @if (authService.isAuthenticated()) {
     <button mat-button (click)="authService.logout()">Déconnexion</button>
   }
 </mat-toolbar>

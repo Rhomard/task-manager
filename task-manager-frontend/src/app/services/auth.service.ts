@@ -10,6 +10,7 @@ export class AuthService {
   private tokenKey = 'auth_token';
 
   isAuthenticated = signal<boolean>(this.hasToken());
+  userEmail = signal<string | null>(this.decodeEmail(this.getToken()));
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -28,6 +29,7 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem(this.tokenKey);
     this.isAuthenticated.set(false);
+    this.userEmail.set(null);
     this.router.navigate(['/login']);
   }
 
@@ -42,5 +44,17 @@ export class AuthService {
   private storeToken(token: string): void {
     localStorage.setItem(this.tokenKey, token);
     this.isAuthenticated.set(true);
+    this.userEmail.set(this.decodeEmail(token));
+  }
+
+  private decodeEmail(token: string | null): string | null {
+    if (!token) return null;
+    try {
+      const payload = token.split('.')[1];
+      const decoded = JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
+      return decoded.sub ?? null;
+    } catch {
+      return null;
+    }
   }
 }
