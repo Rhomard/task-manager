@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://PLACEHOLDER.onrender.com/api'
+  apiUrl: 'https://task-manager-backend-zi1w.onrender.com/api'
 };
