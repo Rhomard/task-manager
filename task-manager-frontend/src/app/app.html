@@ -1,17 +1,25 @@
-<mat-toolbar>
-  <span>Task Manager</span>
-  <span style="flex: 1;"></span>
+<mat-toolbar class="toolbar">
+  <div class="toolbar-left">
+    <span class="toolbar-title">Task Manager</span>
+    @if (authService.isAuthenticated()) {
+      <span class="toolbar-user toolbar-user--mobile">{{ authService.userEmail() }}</span>
+    }
+  </div>
+
+  <span class="toolbar-spacer"></span>
+
   @if (authService.isAuthenticated()) {
-    <span style="font-size: 0.9em; opacity: 0.85;">
-      Connecté(e) en tant que {{ authService.userEmail() }}
-    </span>
+    <span class="toolbar-user toolbar-user--desktop">{{ authService.userEmail() }}</span>
+    <span class="toolbar-spacer"></span>
   }
-  <span style="flex: 1;"></span>
+
   @if (authService.isAuthenticated()) {
-    <button mat-button (click)="authService.logout()">Déconnexion</button>
+    <button mat-icon-button (click)="authService.logout()" aria-label="Déconnexion">
+      <mat-icon>logout</mat-icon>
+    </button>
   }
 </mat-toolbar>
 
-<div style="max-width: 700px; margin: 24px auto; padding: 0 16px;">
+<div class="page-content">
   <router-outlet />
 </div>

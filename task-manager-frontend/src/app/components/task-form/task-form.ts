@@ -4,11 +4,12 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { Task } from '../../models/task.model';
+import { MatSelectModule } from '@angular/material/select';
+import { Task, TaskCategory } from '../../models/task.model';
 
 @Component({
   selector: 'app-task-form',
-  imports: [ReactiveFormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule],
+  imports: [ReactiveFormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatSelectModule],
   templateUrl: './task-form.html',
   styleUrl: './task-form.css'
 })
@@ -20,12 +21,16 @@ export class TaskForm implements OnChanges {
 
   @ViewChild(FormGroupDirective) formGroupDirective!: FormGroupDirective;
 
+  categories: TaskCategory[] = ['TRAVAIL', 'PERSONNEL', 'URGENT', 'AUTRE'];
+
   form: FormGroup;
 
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
       titre: ['', Validators.required],
-      description: ['', Validators.required]
+      description: ['', Validators.required],
+      category: ['AUTRE' as TaskCategory, Validators.required],
+      dateEcheance: ['']
     });
   }
 
@@ -34,35 +39,42 @@ export class TaskForm implements OnChanges {
       if (this.taskToEdit) {
         this.form.patchValue({
           titre: this.taskToEdit.titre,
-          description: this.taskToEdit.description
+          description: this.taskToEdit.description,
+          category: this.taskToEdit.category,
+          dateEcheance: this.taskToEdit.dateEcheance ?? ''
         });
       } else {
-        this.formGroupDirective?.resetForm();
+        this.formGroupDirective?.resetForm({ category: 'AUTRE' });
       }
     }
   }
 
   onSubmit(): void {
     if (this.form.valid) {
+      const formValue = this.form.value;
       if (this.taskToEdit) {
         this.taskUpdated.emit({
           ...this.taskToEdit,
-          titre: this.form.value.titre,
-          description: this.form.value.description
+          titre: formValue.titre,
+          description: formValue.description,
+          category: formValue.category,
+          dateEcheance: formValue.dateEcheance || undefined
         });
       } else {
         this.taskCreated.emit({
-          titre: this.form.value.titre,
-          description: this.form.value.description,
-          termine: false
+          titre: formValue.titre,
+          description: formValue.description,
+          termine: false,
+          category: formValue.category,
+          dateEcheance: formValue.dateEcheance || undefined
         });
       }
-      this.formGroupDirective.resetForm();
+      this.formGroupDirective.resetForm({ category: 'AUTRE' });
     }
   }
 
   onCancel(): void {
     this.cancelled.emit();
-    this.formGroupDirective.resetForm();
+    this.formGroupDirective.resetForm({ category: 'AUTRE' });
   }
 }

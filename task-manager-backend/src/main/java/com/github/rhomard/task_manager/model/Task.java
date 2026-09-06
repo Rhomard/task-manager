@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @Setter
@@ -23,6 +25,11 @@ public class Task {
     private String description;
 
     private boolean termine = false;
+
+    @Enumerated(EnumType.STRING)
+    private TaskCategory category = TaskCategory.AUTRE;
+
+    private LocalDate dateEcheance;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = true)
