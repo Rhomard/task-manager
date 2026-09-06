@@ -72,7 +72,7 @@ filteredTasks = computed(() => {
   } else if (sort === 'TITRE') {
     sorted.sort((a, b) => a.titre.localeCompare(b.titre));
   } else if (sort === 'CATEGORIE') {
-    sorted.sort((a, b) => a.category.localeCompare(b.category));
+  sorted.sort((a, b) => (a.category || 'AUTRE').localeCompare(b.category || 'AUTRE'));
   }
 
   return sorted;

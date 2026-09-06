@@ -55,8 +55,8 @@
               <strong>{{ task.titre }}</strong> - {{ task.description }}
             </div>
             <div class="task-meta">
-              <span class="category-badge" [class]="'cat-' + task.category.toLowerCase()">
-                {{ task.category }}
+              <span class="category-badge" [class]="'cat-' + (task.category || 'AUTRE').toLowerCase()">
+                {{ task.category || 'AUTRE' }}
               </span>
               @if (task.dateEcheance) {
                 <span class="due-date">
